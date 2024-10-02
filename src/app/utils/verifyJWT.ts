@@ -9,14 +9,12 @@ type TTokenElements = {
   _id?: string;
   name: string;
   email: string;
-  role: keyof typeof USER_ROLE | undefined;
   phoneNumber?: string | undefined;
+  role: keyof typeof USER_ROLE | undefined;
 };
 
-export const createToken = (JwtPayload: TTokenElements, secret: string, expireIn: string) => {
-  return jwt.sign(JwtPayload, secret, {
-    expireIn,
-  });
+export const createToken = (tokenPayload: TTokenElements, secret: string, expireIn: string) => {
+  return jwt.sign(tokenPayload, secret, { expiresIn: expireIn });
 };
 
 export const verifyToken = (token: string, secret: string): JwtPayload | Error => {

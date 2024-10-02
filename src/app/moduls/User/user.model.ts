@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 import bcryptjs from "bcryptjs";
 import { Schema, model } from "mongoose";
 import config from "../../config";

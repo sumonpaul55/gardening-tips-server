@@ -15,15 +15,15 @@ const registerUserDb = async (payload: TregisterUser) => {
   payload.role = USER_ROLE.USER;
   const newUser = await User.create(payload);
 
-  const jwtPayload = {
+  const tokenPayload = {
     _id: newUser?._id,
     name: newUser?.name,
     email: newUser?.email,
     phoneNumber: newUser?.phoneNumber,
     role: newUser?.role,
   };
-  const accessToken = createToken(jwtPayload, config.accessTokenSecret as string, config.accessTokenExpiresIn as string);
-  const refreshToken = createToken(jwtPayload, config.jwtRefreshSecret as string, config.refreshTokenExpireIn as string);
+  const accessToken = createToken(tokenPayload, config.accessTokenSecret as string, config.accessTokenExpiresIn as string);
+  const refreshToken = createToken(tokenPayload, config.jwtRefreshSecret as string, config.refreshTokenExpireIn as string);
   return {
     accessToken,
     refreshToken,
