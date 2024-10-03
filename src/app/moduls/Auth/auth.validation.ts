@@ -3,7 +3,7 @@ import { USER_ROLE } from "../User/user.constant";
 
 const registerUserValidationSchema = z.object({
   body: z.object({
-    name: z.string({ required_error: "User Name is required" }),
+    name: z.string({ required_error: "User Name is required" }).trim(),
     role: z.nativeEnum(USER_ROLE).optional(),
     email: z.string({ required_error: "Email is required" }).email({ message: "Please provide an valid email" }),
     phoneNumber: z.string({ required_error: "phone number need" }),
@@ -30,8 +30,17 @@ const loginValidation = z.object({
   }),
 });
 
+const refreshTokenValidation = z.object({
+  cookies: z.object({
+    refreshToken: z.string({
+      required_error: "RefreshToken is required",
+    }),
+  }),
+});
+
 export const authValidation = {
   registerUserValidationSchema,
   updateUserValidationSchema,
   loginValidation,
+  refreshTokenValidation,
 };

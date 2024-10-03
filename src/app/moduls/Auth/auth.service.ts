@@ -3,9 +3,10 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { User } from "../User/user.model";
 import { TLoginUser, TregisterUser } from "./auth.interface";
-import { createToken } from "../../utils/verifyJWT";
 import config from "../../config";
 import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { createToken } from "../../utils/verifyJWT";
 
 const registerUserDb = async (file: any, payload: TregisterUser) => {
   // check if the user is exist
@@ -62,7 +63,29 @@ const loginToDb = async (payload: TLoginUser) => {
     refreshToken,
   };
 };
+
+const refreshTokenDb = async (token: string) => {
+  const decoded = jwt.verify(token, config.jwtRefreshSecret as string) as JwtPayload;
+  const { email, iat } = decoded;
+  const user = await User.isUserExistsByEmail(email);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "This user is not found!");
+  }
+  if (user.passwordChangedAt && User.isJWTIssuedBeforePasswordChanged(user.passwordChangedAt, iat as number)) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized !");
+  }
+  const tokenPayload = {
+    _id: user?._id,
+    name: user?.name,
+    email: user?.email,
+    phoneNumber: user?.phoneNumber,
+    role: user?.role,
+  };
+  const accessToken = createToken(tokenPayload, config.accessTokenSecret as string, config.accessTokenExpiresIn as string);
+  return accessToken;
+};
 export const authServices = {
   registerUserDb,
   loginToDb,
+  refreshTokenDb,
 };
