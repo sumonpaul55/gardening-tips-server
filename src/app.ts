@@ -6,9 +6,12 @@ import notFound from "./app/middleWare/notFound";
 import router from "./app/router";
 const app: Application = express();
 
-app.use(express.json());
-app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
 app.use(cookieParser());
+app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
+
+// parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
 
