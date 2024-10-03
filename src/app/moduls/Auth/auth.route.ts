@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authValidation } from "./auth.validation";
 import { authController } from "./auth.controler";
-import validateRequest from "../../middleWare/validateRequest";
+import validateRequest, { validateRequestCookies } from "../../middleWare/validateRequest";
 import { upload } from "../../utils/sendImageToCloudinary";
 
 const router = Router();
@@ -17,6 +17,6 @@ router.post(
 );
 router.post("/login", validateRequest(authValidation.loginValidation), authController.loginUser);
 
-router.post("/refresh-token", validateRequest(authValidation.refreshTokenValidation));
+router.post("/refresh-token", validateRequestCookies(authValidation.refreshTokenValidation), authController.refreshToken);
 
 export const authRouter = router;

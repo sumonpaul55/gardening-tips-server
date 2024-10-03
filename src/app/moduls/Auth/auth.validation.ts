@@ -33,7 +33,7 @@ const loginValidation = z.object({
 const refreshTokenValidation = z.object({
   cookies: z.object({
     refreshToken: z.string({
-      required_error: "RefreshToken is required",
+      required_error: "Refresh token is required!",
     }),
   }),
 });
