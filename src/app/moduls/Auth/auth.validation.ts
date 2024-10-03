@@ -8,7 +8,7 @@ const registerUserValidationSchema = z.object({
     email: z.string({ required_error: "Email is required" }).email({ message: "Please provide an valid email" }),
     phoneNumber: z.string({ required_error: "phone number need" }),
     password: z.string({ required_error: "Password is required" }),
-    profilePhoto: z.string({ required_error: "Profile image is missing" }),
+    profilePhoto: z.string().optional(),
   }),
 });
 

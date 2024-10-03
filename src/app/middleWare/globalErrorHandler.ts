@@ -8,8 +8,9 @@ import handleValidationError from "../errors/handleValidationError";
 import handleCastError from "../errors/handleCastError";
 import handleDuplicateError from "../errors/handleDuplicateError";
 import AppError from "../errors/AppError";
+import { TImageFiles } from "../interface/imageInterFace";
 
-const globalErrorhandler: ErrorRequestHandler = (err, req, res, next) => {
+const globalErrorhandler: ErrorRequestHandler = async (err, req, res, next) => {
   let statusCode = err.statusCode ? err.statusCode : 500;
   let message = "Something went wrong";
   let errorSource: TErrorSource = [
@@ -47,6 +48,9 @@ const globalErrorhandler: ErrorRequestHandler = (err, req, res, next) => {
         message: err.message,
       },
     ];
+    // if (req.files && Object.keys(req.files).length > 0) {
+    //   await deleteImageFromCloudinary(req.files as TImageFiles);
+    // }
   } else if (err instanceof AppError) {
     statusCode = err?.statusCode;
     message = err.message;

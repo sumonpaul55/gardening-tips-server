@@ -1,18 +1,27 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { User } from "../User/user.model";
 import { TLoginUser, TregisterUser } from "./auth.interface";
-import { USER_ROLE } from "../User/user.constant";
 import { createToken } from "../../utils/verifyJWT";
 import config from "../../config";
+import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 
-const registerUserDb = async (payload: TregisterUser) => {
+const registerUserDb = async (file: any, payload: TregisterUser) => {
   // check if the user is exist
+
+  if (file) {
+    const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
+    const path = String(file?.path);
+    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+    payload.profilePhoto = secure_url;
+  }
+
   const user = await User.isUserExistsByEmail(payload.email);
   if (user) {
     throw new AppError(httpStatus.NOT_FOUND, "This user already exist");
   }
-  payload.role = USER_ROLE.USER;
+
   const newUser = await User.create(payload);
 
   const tokenPayload = {

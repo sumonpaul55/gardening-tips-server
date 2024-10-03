@@ -2,14 +2,16 @@ import { Router } from "express";
 import { authValidation } from "./auth.validation";
 import { authController } from "./auth.controler";
 import validateRequest from "../../middleWare/validateRequest";
-import { multerUpload } from "../../config/multer.config";
-import { parseBody } from "../../middleWare/bodyParser";
+import { upload } from "../../utils/sendImageToCloudinary";
 
 const router = Router();
 router.post(
   "/register",
-  multerUpload.fields([{ name: "userImage" }]),
-  parseBody,
+  upload.single("file"),
+  (req, res, next) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   validateRequest(authValidation.registerUserValidationSchema),
   authController.registerUser
 );
