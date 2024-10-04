@@ -15,4 +15,7 @@ exports.default = {
     accessTokenExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
     jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
     refreshTokenExpireIn: process.env.JWT_REFRESH_EXPIRES_IN,
+    cloude_Name: process.env.cloud_name,
+    cloud_Api_key: process.env.cloud_Api_key,
+    cloud_Secret: process.env.cloudApi_Secret,
 };

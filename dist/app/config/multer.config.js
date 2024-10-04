@@ -1,3 +1,4 @@
+"use strict";
 // import { CloudinaryStorage } from "multer-storage-cloudinary";
 // import { couldinaryUpload } from "./cloudinary.config";
 // import multer from "multer";
@@ -5,7 +6,6 @@
 // const removeExtension = (fileName: string) => {
 //   return fileName.split(".").slice(0, -1).join(".");
 // };
-
 // const storage = new CloudinaryStorage({
 //   cloudinary: couldinaryUpload,
 //   params: {

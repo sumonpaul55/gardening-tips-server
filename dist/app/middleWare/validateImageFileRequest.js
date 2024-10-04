@@ -8,17 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.userService = void 0;
-const user_model_1 = require("./user.model");
-const getAllUserDb = () => __awaiter(void 0, void 0, void 0, function* () {
-    return "somethig";
-});
-const getUsebyEmailDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.findOne({ email: payload });
-    return result;
-});
-exports.userService = {
-    getAllUserDb,
-    getUsebyEmailDb,
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
+const validateImageFileRequest = (schema) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const parsedFile = yield schema.parseAsync({
+            files: req.files,
+        });
+        req.files = parsedFile.files;
+        next();
+    }));
+};
+exports.default = validateImageFileRequest;

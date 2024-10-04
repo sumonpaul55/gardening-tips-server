@@ -13,19 +13,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authServices = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = require("../User/user.model");
-const user_constant_1 = require("../User/user.constant");
-const verifyJWT_1 = require("../../utils/verifyJWT");
 const config_1 = __importDefault(require("../../config"));
-const registerUserDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const sendImageToCloudinary_1 = require("../../utils/sendImageToCloudinary");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const verifyJWT_1 = require("../../utils/verifyJWT");
+const registerUserDb = (file, payload) => __awaiter(void 0, void 0, void 0, function* () {
     // check if the user is exist
+    if (file) {
+        const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
+        const path = String(file === null || file === void 0 ? void 0 : file.path);
+        const { secure_url } = yield (0, sendImageToCloudinary_1.sendImageToCloudinary)(imageName, path);
+        payload.profilePhoto = secure_url;
+    }
     const user = yield user_model_1.User.isUserExistsByEmail(payload.email);
     if (user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "This user already exist");
     }
-    payload.role = user_constant_1.USER_ROLE.USER;
     const newUser = yield user_model_1.User.create(payload);
     const tokenPayload = {
         _id: newUser === null || newUser === void 0 ? void 0 : newUser._id,
@@ -64,7 +71,28 @@ const loginToDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         refreshToken,
     };
 });
+const refreshTokenDb = (token) => __awaiter(void 0, void 0, void 0, function* () {
+    const decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwtRefreshSecret);
+    const { email, iat } = decoded;
+    const user = yield user_model_1.User.isUserExistsByEmail(email);
+    if (!user) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "This user is not found!");
+    }
+    if (user.passwordChangedAt && user_model_1.User.isJWTIssuedBeforePasswordChanged(user.passwordChangedAt, iat)) {
+        throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "You are not authorized !");
+    }
+    const tokenPayload = {
+        _id: user === null || user === void 0 ? void 0 : user._id,
+        name: user === null || user === void 0 ? void 0 : user.name,
+        email: user === null || user === void 0 ? void 0 : user.email,
+        phoneNumber: user === null || user === void 0 ? void 0 : user.phoneNumber,
+        role: user === null || user === void 0 ? void 0 : user.role,
+    };
+    const accessToken = (0, verifyJWT_1.createToken)(tokenPayload, config_1.default.accessTokenSecret, config_1.default.accessTokenExpiresIn);
+    return accessToken;
+});
 exports.authServices = {
     registerUserDb,
     loginToDb,
+    refreshTokenDb,
 };
