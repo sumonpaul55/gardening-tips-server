@@ -6,6 +6,15 @@ const postSchema = new Schema<TPost>({
   post: {
     type: String,
   },
+  userId: { type: Schema.Types.ObjectId },
+  activity: [
+    {
+      userId: Schema.Types.ObjectId,
+      comment: String,
+      votes: Boolean,
+    },
+  ],
+  category: { type: Schema.Types.ObjectId, required: [true, "Post category is required"] },
 });
 
 export const Post = model<TPost>("Post", postSchema);

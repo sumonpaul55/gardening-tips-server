@@ -1,25 +1,37 @@
 import { z } from "zod";
 import { USER_ROLE } from "../User/user.constant";
+import mongoose from "mongoose";
 
 const registerUserValidationSchema = z.object({
   body: z.object({
-    name: z.string({ required_error: "User Name is required" }).trim(),
+    name: z.string().min(1, "Name is required"),
     role: z.nativeEnum(USER_ROLE).optional(),
-    email: z.string({ required_error: "Email is required" }).email({ message: "Please provide an valid email" }),
-    phoneNumber: z.string({ required_error: "phone number need" }),
-    password: z.string({ required_error: "Password is required" }),
-    profilePhoto: z.string().optional(),
+    email: z.string().email("Invalid email address"),
+    follower: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
+    following: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
+    upVotesItem: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
+    downVotesItem: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    phoneNumber: z.string().optional(),
+    verified: z.boolean().optional(),
+    profilePhoto: z.string().url("Invalid URL").optional(),
   }),
 });
 
 const updateUserValidationSchema = z.object({
   body: z.object({
-    name: z.string().optional(),
+    _id: z.string().optional(),
+    name: z.string().min(1, "Name is required").optional(),
     role: z.nativeEnum(USER_ROLE).optional(),
-    email: z.string().email({ message: "Please provide an valid email" }).optional(),
+    email: z.string().email("Invalid email address").optional(),
+    follower: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
+    following: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
+    upVotesItem: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
+    downVotesItem: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
+    password: z.string().min(6, "Password must be at least 6 characters").optional(),
     phoneNumber: z.string().optional(),
-    password: z.string().optional(),
-    profilePhoto: z.string().optional(),
+    profilePhoto: z.string().url("Invalid URL").optional(),
+    verified: z.boolean().optional(),
   }),
 });
 

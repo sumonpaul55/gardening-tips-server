@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { USER_ROLE } from "./user.constant";
 
 export type TUser = {
@@ -6,6 +6,11 @@ export type TUser = {
   name: string;
   role?: keyof typeof USER_ROLE;
   email: string;
+  follower?: mongoose.Schema.Types.ObjectId[];
+  following?: mongoose.Schema.Types.ObjectId[];
+  upVotesItem?: mongoose.Schema.Types.ObjectId[];
+  downVotesItem?: mongoose.Schema.Types.ObjectId[];
+  verified?: boolean;
   password: string;
   passwordChangedAt?: Date;
   phoneNumber?: string;

@@ -21,10 +21,26 @@ const userSchema = new Schema<TUser, IUserModel>(
       //validate email
       //   match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, "Please fill a valid email address"],
     },
+    follower: {
+      type: [Schema.Types.ObjectId],
+    },
+    following: {
+      type: [Schema.Types.ObjectId],
+    },
+    upVotesItem: {
+      type: [Schema.Types.ObjectId],
+    },
+    downVotesItem: {
+      type: [Schema.Types.ObjectId],
+    },
     password: {
       type: String,
       required: true,
       select: 0,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
     },
     // passwordChangedAt: {
     //   type: Date,
@@ -33,6 +49,7 @@ const userSchema = new Schema<TUser, IUserModel>(
       type: String,
       required: true,
     },
+
     profilePhoto: {
       type: String,
       default: null,
