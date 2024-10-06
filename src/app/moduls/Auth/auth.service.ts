@@ -84,8 +84,26 @@ const refreshTokenDb = async (token: string) => {
   const accessToken = createToken(tokenPayload, config.accessTokenSecret as string, config.accessTokenExpiresIn as string);
   return accessToken;
 };
+// update user
+const updateUserDb = async (id: string, file: any, payload: TregisterUser) => {
+  // check if the user is exist
+  if (file) {
+    const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
+    const path = String(file?.path);
+    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+    payload.profilePhoto = secure_url;
+  }
+
+  const isUserExist = await User.findById(id);
+  if (!isUserExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found withh this is");
+  }
+  const newUser = await User.findByIdAndUpdate(id, payload, { new: true, upsert: true });
+  return newUser;
+};
 export const authServices = {
   registerUserDb,
   loginToDb,
   refreshTokenDb,
+  updateUserDb,
 };

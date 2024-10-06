@@ -33,8 +33,19 @@ const refreshToken = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// update user
+const updateUser = catchAsync(async (req, res) => {
+  const result = await authServices.updateUserDb(req.params.id, req.file, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User Register successfully",
+    data: result,
+  });
+});
 export const authController = {
   registerUser,
   loginUser,
   refreshToken,
+  updateUser,
 };

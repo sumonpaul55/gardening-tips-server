@@ -19,6 +19,7 @@ router.post("/login", validateRequest(authValidation.loginValidation), authContr
 
 router.post("/refresh-token", validateRequestCookies(authValidation.refreshTokenValidation), authController.refreshToken);
 
+// update user
 router.put(
   "/register",
   upload.single("file"),
@@ -26,8 +27,7 @@ router.put(
     req.body = JSON.parse(req.body.data);
     next();
   },
-  validateRequest(authValidation.registerUserValidationSchema),
+  validateRequest(authValidation.updateUserValidationSchema),
   authController.registerUser
 );
-
 export const authRouter = router;
