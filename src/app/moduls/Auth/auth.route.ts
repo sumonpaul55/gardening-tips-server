@@ -3,6 +3,8 @@ import { authValidation } from "./auth.validation";
 import { authController } from "./auth.controler";
 import validateRequest, { validateRequestCookies } from "../../middleWare/validateRequest";
 import { upload } from "../../utils/sendImageToCloudinary";
+import authGaurd from "../../middleWare/authGaurd";
+import { USER_ROLE } from "../User/user.constant";
 
 const router = Router();
 router.post(
@@ -21,13 +23,14 @@ router.post("/refresh-token", validateRequestCookies(authValidation.refreshToken
 
 // update user
 router.put(
-  "/register",
+  "/update-user/:id",
   upload.single("file"),
   (req, res, next) => {
     req.body = JSON.parse(req.body.data);
     next();
   },
+  authGaurd(USER_ROLE.ADMIN, USER_ROLE.USER),
   validateRequest(authValidation.updateUserValidationSchema),
-  authController.registerUser
+  authController.updateUser
 );
 export const authRouter = router;

@@ -39,7 +39,7 @@ const updateUser = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "User Register successfully",
+    message: "Updated successfully",
     data: result,
   });
 });

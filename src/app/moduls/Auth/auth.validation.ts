@@ -22,16 +22,8 @@ const updateUserValidationSchema = z.object({
   body: z.object({
     _id: z.string().optional(),
     name: z.string().min(1, "Name is required").optional(),
-    role: z.nativeEnum(USER_ROLE).optional(),
-    email: z.string().email("Invalid email address").optional(),
-    follower: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
-    following: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
-    upVotesItem: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
-    downVotesItem: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
-    password: z.string().min(6, "Password must be at least 6 characters").optional(),
     phoneNumber: z.string().optional(),
     profilePhoto: z.string().url("Invalid URL").optional(),
-    verified: z.boolean().optional(),
     address: z.string().optional(),
     links: z
       .array(
