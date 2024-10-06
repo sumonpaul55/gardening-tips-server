@@ -17,6 +17,11 @@ export type TUser = {
   profilePhoto?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  links?: {
+    socialName?: string;
+    url?: string;
+  }[];
+  address?: string;
 };
 
 export interface IUserModel extends Model<TUser> {

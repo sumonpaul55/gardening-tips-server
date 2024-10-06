@@ -32,6 +32,17 @@ const updateUserValidationSchema = z.object({
     phoneNumber: z.string().optional(),
     profilePhoto: z.string().url("Invalid URL").optional(),
     verified: z.boolean().optional(),
+    address: z.string().optional(),
+    links: z
+      .array(
+        z
+          .object({
+            socialName: z.string().optional(),
+            url: z.string().url("Invalid Url").optional(),
+          })
+          .optional()
+      )
+      .optional(),
   }),
 });
 

@@ -19,4 +19,15 @@ router.post("/login", validateRequest(authValidation.loginValidation), authContr
 
 router.post("/refresh-token", validateRequestCookies(authValidation.refreshTokenValidation), authController.refreshToken);
 
+router.put(
+  "/register",
+  upload.single("file"),
+  (req, res, next) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  validateRequest(authValidation.registerUserValidationSchema),
+  authController.registerUser
+);
+
 export const authRouter = router;

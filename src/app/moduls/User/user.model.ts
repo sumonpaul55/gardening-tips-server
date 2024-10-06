@@ -54,6 +54,13 @@ const userSchema = new Schema<TUser, IUserModel>(
       type: String,
       default: null,
     },
+    links: [
+      {
+        socialName: { type: String },
+        url: { type: String },
+      },
+    ],
+    address: { type: String },
   },
   {
     timestamps: true,
