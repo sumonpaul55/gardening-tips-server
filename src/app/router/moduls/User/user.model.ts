@@ -1,6 +1,6 @@
 import bcryptjs from "bcryptjs";
 import { Schema, model } from "mongoose";
-import config from "../../config";
+import config from "../../../config";
 import { USER_ROLE } from "./user.constant";
 import { IUserModel, TUser } from "./user.interface";
 
@@ -61,7 +61,7 @@ const userSchema = new Schema<TUser, IUserModel>(
         _id: false,
       },
     ],
-    address: { type: String },
+    address: { type: String, default: "" },
   },
   {
     timestamps: true,

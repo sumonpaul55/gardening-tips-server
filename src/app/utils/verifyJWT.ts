@@ -1,4 +1,4 @@
-import { USER_ROLE } from "./../moduls/User/user.constant";
+import { USER_ROLE } from "../router/moduls/User/user.constant";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

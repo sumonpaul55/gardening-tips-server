@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
+import catchAsync from "../../../utils/catchAsync";
+import sendResponse from "../../../utils/sendResponse";
 import { postService } from "./post.service";
 
 const makePost = catchAsync(async (req, res) => {
@@ -22,6 +22,7 @@ const getPosts = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
 const getMyPostVoteSummery = catchAsync(async (req, res) => {
   const result = await postService.getVoteSummeryDb(req.params.id);
   sendResponse(res, {
@@ -31,8 +32,20 @@ const getMyPostVoteSummery = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+// get post by id
+const getPostByid = catchAsync(async (req, res) => {
+  const result = await postService.getPostByidDb(req.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Post retrive successfully",
+    data: result,
+  });
+});
 export const postController = {
   makePost,
   getPosts,
   getMyPostVoteSummery,
+  getPostByid,
 };

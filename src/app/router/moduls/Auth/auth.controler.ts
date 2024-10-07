@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
+import catchAsync from "../../../utils/catchAsync";
+import sendResponse from "../../../utils/sendResponse";
 import { authServices } from "./auth.service";
 
 const registerUser = catchAsync(async (req, res) => {
@@ -35,7 +35,6 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 // update user
 const updateUser = catchAsync(async (req, res) => {
-  console.log(req.body);
   const result = await authServices.updateUserDb(req.params.id, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { authValidation } from "./auth.validation";
 import { authController } from "./auth.controler";
-import validateRequest, { validateRequestCookies } from "../../middleWare/validateRequest";
-import authGaurd from "../../middleWare/authGaurd";
+import validateRequest, { validateRequestCookies } from "../../../middleWare/validateRequest";
+import authGaurd from "../../../middleWare/authGaurd";
 import { USER_ROLE } from "../User/user.constant";
 
 const router = Router();

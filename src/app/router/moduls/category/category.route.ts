@@ -1,7 +1,7 @@
 import { Router } from "express";
-import authGaurd from "../../middleWare/authGaurd";
+import authGaurd from "../../../middleWare/authGaurd";
 import { USER_ROLE } from "../User/user.constant";
-import validateRequest from "../../middleWare/validateRequest";
+import validateRequest from "../../../middleWare/validateRequest";
 import { categoryValidation } from "./category.validation";
 import { categoryController } from "./category.controller";
 

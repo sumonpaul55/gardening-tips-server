@@ -29,7 +29,7 @@ const updateUserValidationSchema = z.object({
         z
           .object({
             socialName: z.string().optional(),
-            url: z.string().url("Invalid Url").optional(),
+            url: z.string().optional(),
           })
           .optional()
       )
