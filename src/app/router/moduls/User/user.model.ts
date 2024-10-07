@@ -54,13 +54,23 @@ const userSchema = new Schema<TUser, IUserModel>(
       type: String,
       default: null,
     },
-    links: [
-      {
-        socialName: { type: String },
-        url: { type: String },
-        _id: false,
-      },
-    ],
+    links: {
+      type: [
+        {
+          socialName: { type: String },
+          url: { type: String },
+          _id: false,
+        },
+      ],
+      default: [
+        { socialName: "Facebook", url: "" },
+        { socialName: "Youtube", url: "" },
+        { socialName: "Twitter", url: "" },
+        { socialName: "Instagram", url: "" },
+        { socialName: "Pinterest", url: "" },
+        { socialName: "Linkedin", url: "" },
+      ],
+    },
     address: { type: String, default: "" },
   },
   {
