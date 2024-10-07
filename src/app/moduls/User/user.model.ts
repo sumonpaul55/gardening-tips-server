@@ -58,6 +58,7 @@ const userSchema = new Schema<TUser, IUserModel>(
       {
         socialName: { type: String },
         url: { type: String },
+        _id: false,
       },
     ],
     address: { type: String },

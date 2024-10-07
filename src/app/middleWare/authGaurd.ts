@@ -21,7 +21,7 @@ const authGaurd = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
     // check if the use is exist
     const user = await User.isUserExistsByEmail(email);
     if (!user) {
-      throw new AppError(httpStatus.NOT_FOUND, "Your are not eligible for this operation");
+      throw new AppError(httpStatus.UNAUTHORIZED, "Your are not eligible for this operation");
     }
 
     // checking

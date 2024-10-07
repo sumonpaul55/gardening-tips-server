@@ -14,16 +14,15 @@ const registerUserValidationSchema = z.object({
     password: z.string().min(6, "Password must be at least 6 characters"),
     phoneNumber: z.string().optional(),
     verified: z.boolean().optional(),
-    profilePhoto: z.string().url("Invalid URL").optional(),
+    profilePhoto: z.string(),
   }),
 });
 
 const updateUserValidationSchema = z.object({
   body: z.object({
-    _id: z.string().optional(),
     name: z.string().min(1, "Name is required").optional(),
     phoneNumber: z.string().optional(),
-    profilePhoto: z.string().url("Invalid URL").optional(),
+    profilePhoto: z.string().optional(),
     address: z.string().optional(),
     links: z
       .array(

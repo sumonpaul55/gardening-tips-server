@@ -30,7 +30,7 @@ const authGaurd = (...requiredRoles) => {
         // check if the use is exist
         const user = yield user_model_1.User.isUserExistsByEmail(email);
         if (!user) {
-            throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Your are not eligible for this operation");
+            throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "Your are not eligible for this operation");
         }
         // checking
         if (requiredRoles && !requiredRoles.includes(role)) {

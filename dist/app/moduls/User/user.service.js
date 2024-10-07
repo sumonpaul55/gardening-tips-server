@@ -12,13 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = void 0;
 const user_model_1 = require("./user.model");
 const getAllUserDb = () => __awaiter(void 0, void 0, void 0, function* () {
-    return "somethig";
+    return yield user_model_1.User.find();
 });
 const getUsebyEmailDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.findOne({ email: payload });
     return result;
 });
+const getUsebyIdDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.findById(id);
+    return result;
+});
 exports.userService = {
     getAllUserDb,
     getUsebyEmailDb,
+    getUsebyIdDb,
 };

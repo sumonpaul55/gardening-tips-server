@@ -4,7 +4,7 @@ import sendResponse from "../../utils/sendResponse";
 import { authServices } from "./auth.service";
 
 const registerUser = catchAsync(async (req, res) => {
-  const result = await authServices.registerUserDb(req.file, req.body);
+  const result = await authServices.registerUserDb(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -35,7 +35,8 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 // update user
 const updateUser = catchAsync(async (req, res) => {
-  const result = await authServices.updateUserDb(req.params.id, req.file, req.body);
+  console.log(req.body);
+  const result = await authServices.updateUserDb(req.params.id, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

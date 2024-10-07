@@ -18,17 +18,16 @@ const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = require("../User/user.model");
 const config_1 = __importDefault(require("../../config"));
-const sendImageToCloudinary_1 = require("../../utils/sendImageToCloudinary");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const verifyJWT_1 = require("../../utils/verifyJWT");
-const registerUserDb = (file, payload) => __awaiter(void 0, void 0, void 0, function* () {
+const registerUserDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     // check if the user is exist
-    if (file) {
-        const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
-        const path = String(file === null || file === void 0 ? void 0 : file.path);
-        const { secure_url } = yield (0, sendImageToCloudinary_1.sendImageToCloudinary)(imageName, path);
-        payload.profilePhoto = secure_url;
-    }
+    // if (file) {
+    //   const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
+    //   const path = String(file?.path);
+    //   const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+    //   payload.profilePhoto = secure_url;
+    // }
     const user = yield user_model_1.User.isUserExistsByEmail(payload.email);
     if (user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "This user already exist");
@@ -91,8 +90,25 @@ const refreshTokenDb = (token) => __awaiter(void 0, void 0, void 0, function* ()
     const accessToken = (0, verifyJWT_1.createToken)(tokenPayload, config_1.default.accessTokenSecret, config_1.default.accessTokenExpiresIn);
     return accessToken;
 });
+// update user
+const updateUserDb = (id, file, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    // check if the user is exist
+    // if (file) {
+    // const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
+    // const path = String(file?.path);
+    // const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+    //   payload.profilePhoto = secure_url;
+    // }
+    const isUserExist = yield user_model_1.User.findById(id);
+    if (!isUserExist) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User not found withh this is");
+    }
+    const newUser = yield user_model_1.User.findByIdAndUpdate(id, payload, { new: true, upsert: true });
+    return newUser;
+});
 exports.authServices = {
     registerUserDb,
     loginToDb,
     refreshTokenDb,
+    updateUserDb,
 };

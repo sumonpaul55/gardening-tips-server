@@ -4,19 +4,18 @@ import AppError from "../../errors/AppError";
 import { User } from "../User/user.model";
 import { TLoginUser, TregisterUser } from "./auth.interface";
 import config from "../../config";
-import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { createToken } from "../../utils/verifyJWT";
 
-const registerUserDb = async (file: any, payload: TregisterUser) => {
+const registerUserDb = async (payload: TregisterUser) => {
   // check if the user is exist
 
-  if (file) {
-    const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
-    const path = String(file?.path);
-    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
-    payload.profilePhoto = secure_url;
-  }
+  // if (file) {
+  //   const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
+  //   const path = String(file?.path);
+  //   const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+  //   payload.profilePhoto = secure_url;
+  // }
 
   const user = await User.isUserExistsByEmail(payload.email);
   if (user) {
@@ -85,18 +84,23 @@ const refreshTokenDb = async (token: string) => {
   return accessToken;
 };
 // update user
-const updateUserDb = async (id: string, file: any, payload: TregisterUser) => {
+const updateUserDb = async (id: string, payload: TregisterUser) => {
   // check if the user is exist
-  if (file) {
-    const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
-    const path = String(file?.path);
-    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
-    payload.profilePhoto = secure_url;
-  }
+  // if (file) {
+  // const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
+  // const path = String(file?.path);
+  // const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+  //   payload.profilePhoto = secure_url;
+  // }
 
   const isUserExist = await User.findById(id);
   if (!isUserExist) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found withh this is");
+  }
+  // check image new url added
+
+  if (!payload.profilePhoto) {
+    payload.profilePhoto = isUserExist?.profilePhoto;
   }
   const newUser = await User.findByIdAndUpdate(id, payload, { new: true, upsert: true });
   return newUser;

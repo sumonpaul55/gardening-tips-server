@@ -33,10 +33,26 @@ const userSchema = new mongoose_1.Schema({
         //validate email
         //   match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, "Please fill a valid email address"],
     },
+    follower: {
+        type: [mongoose_1.Schema.Types.ObjectId],
+    },
+    following: {
+        type: [mongoose_1.Schema.Types.ObjectId],
+    },
+    upVotesItem: {
+        type: [mongoose_1.Schema.Types.ObjectId],
+    },
+    downVotesItem: {
+        type: [mongoose_1.Schema.Types.ObjectId],
+    },
     password: {
         type: String,
         required: true,
         select: 0,
+    },
+    verified: {
+        type: Boolean,
+        default: false,
     },
     // passwordChangedAt: {
     //   type: Date,
@@ -49,6 +65,13 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         default: null,
     },
+    links: [
+        {
+            socialName: { type: String },
+            url: { type: String },
+        },
+    ],
+    address: { type: String },
 }, {
     timestamps: true,
     virtuals: true,

@@ -11,4 +11,5 @@ const user_constant_1 = require("../User/user.constant");
 const router = (0, express_1.Router)();
 router.post("/", (0, authGaurd_1.default)(user_constant_1.USER_ROLE.USER), post_controller_1.postController.makePost);
 router.get("/", post_controller_1.postController.getPosts);
+router.get("/voteSummery", (0, authGaurd_1.default)(user_constant_1.USER_ROLE.ADMIN, user_constant_1.USER_ROLE.USER), post_controller_1.postController.getMyPostVoteSummery);
 exports.postRouter = router;

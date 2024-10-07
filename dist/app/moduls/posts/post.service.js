@@ -16,9 +16,14 @@ const makePostDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getAllPost = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield post_model_1.Post.find();
+    return yield post_model_1.Post.find().populate("userId").populate("category");
+});
+const getVoteSummeryDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = post_model_1.Post.aggregate([{ $match: { userId: id } }]);
+    return result;
 });
 exports.postService = {
     makePostDb,
     getAllPost,
+    getVoteSummeryDb,
 };
