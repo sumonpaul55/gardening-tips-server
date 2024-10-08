@@ -24,16 +24,15 @@ const registerUserValidationSchema = zod_1.z.object({
 });
 const updateUserValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
-        _id: zod_1.z.string().optional(),
         name: zod_1.z.string().min(1, "Name is required").optional(),
         phoneNumber: zod_1.z.string().optional(),
-        profilePhoto: zod_1.z.string().url("Invalid URL").optional(),
+        profilePhoto: zod_1.z.string().optional(),
         address: zod_1.z.string().optional(),
         links: zod_1.z
             .array(zod_1.z
             .object({
             socialName: zod_1.z.string().optional(),
-            url: zod_1.z.string().url("Invalid Url").optional(),
+            url: zod_1.z.string().optional(),
         })
             .optional())
             .optional(),

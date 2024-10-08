@@ -1,9 +1,9 @@
-import { USER_ROLE } from "../router/moduls/User/user.constant";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import AppError from "../errors/AppError";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { USER_ROLE } from "../moduls/User/user.constant";
 
 type TTokenElements = {
   _id?: string;

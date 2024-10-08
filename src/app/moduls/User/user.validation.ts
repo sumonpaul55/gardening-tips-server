@@ -16,3 +16,14 @@ export const userSchema = z.object({
 });
 
 export type TUser = z.infer<typeof userSchema>;
+
+const followUnfollowValidationSchema = z.object({
+  body: z.object({
+    userId: z.string({ required_error: "user id required" }),
+    email: z.string({ required_error: "email id required" }),
+  }),
+});
+
+export const userValidation = {
+  followUnfollowValidationSchema,
+};

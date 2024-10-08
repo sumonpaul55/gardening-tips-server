@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
-import AppError from "../../../errors/AppError";
 import { User } from "../User/user.model";
 import { TLoginUser, TregisterUser } from "./auth.interface";
-import config from "../../../config";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { createToken } from "../../../utils/verifyJWT";
+import AppError from "../../errors/AppError";
+import { createToken } from "../../utils/verifyJWT";
+import config from "../../config";
 
 const registerUserDb = async (payload: TregisterUser) => {
   // check if the user is exist

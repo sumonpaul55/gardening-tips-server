@@ -8,9 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = void 0;
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const http_status_1 = __importDefault(require("http-status"));
 const user_model_1 = require("./user.model");
+const mongoose_1 = require("mongoose");
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const getAllUserDb = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield user_model_1.User.find();
 });
@@ -22,8 +30,46 @@ const getUsebyIdDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.findById(id);
     return result;
 });
+const addFollowerAndFolloing = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const followingUser = yield user_model_1.User.findOne({ email: payload.email });
+    const followedUser = yield user_model_1.User.findById(payload.userId);
+    if (!followingUser || !followedUser) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "One or more user not found");
+    }
+    const session = yield (0, mongoose_1.startSession)();
+    try {
+        session.startTransaction();
+        // check the the follower already following or not
+        const alreadyFollowing = user_model_1.User.findOne({
+            _id: payload.userId,
+            follower: followingUser._id,
+        });
+        // add to follower
+        if (!alreadyFollowing) {
+            yield user_model_1.User.findByIdAndUpdate(payload.userId, { follower: followingUser === null || followingUser === void 0 ? void 0 : followingUser._id }, { new: true, upsert: true, session });
+            // update who is follwoing update his folloing
+            yield user_model_1.User.findOneAndUpdate({ email: payload.email }, { $addToSet: { following: payload.userId } }, { new: true, upsert: true, session });
+            yield session.commitTransaction();
+            yield session.endSession();
+            return { message: "Following successfull" };
+        }
+        // remove follower if already following or unfollow
+        yield user_model_1.User.findByIdAndUpdate(followedUser._id, { $pull: { follower: followedUser._id } }, { new: true, session });
+        // remove form own following
+        yield user_model_1.User.findOneAndUpdate({ email: payload.email }, { $pull: { following: payload.userId } }, { new: true, upsert: true, session });
+        yield session.commitTransaction();
+        yield session.endSession();
+        return { message: "Unfollow Successfull" };
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        yield session.endSession();
+        throw new AppError_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, "Faild to following");
+    }
+});
 exports.userService = {
     getAllUserDb,
     getUsebyEmailDb,
     getUsebyIdDb,
+    addFollowerAndFolloing,
 };

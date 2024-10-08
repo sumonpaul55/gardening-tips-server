@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
-import catchAsync from "../../../utils/catchAsync";
-import sendResponse from "../../../utils/sendResponse";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
 import { userService } from "./user.service";
 
 const getAlluser = catchAsync(async (req, res) => {
@@ -30,4 +30,13 @@ const getUserById = catchAsync(async (req, res) => {
     data: result,
   });
 });
-export const userController = { getAlluser, getUserByEmail, getUserById };
+const followUnfollow = catchAsync(async (req, res) => {
+  const reslut = await userService.addFollowerAndFolloing(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: reslut.message,
+    data: null,
+  });
+});
+export const userController = { getAlluser, getUserByEmail, getUserById, followUnfollow };

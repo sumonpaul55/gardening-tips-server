@@ -1,6 +1,6 @@
 import bcryptjs from "bcryptjs";
 import { Schema, model } from "mongoose";
-import config from "../../../config";
+import config from "../../config";
 import { USER_ROLE } from "./user.constant";
 import { IUserModel, TUser } from "./user.interface";
 
@@ -21,11 +21,15 @@ const userSchema = new Schema<TUser, IUserModel>(
       //validate email
       //   match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, "Please fill a valid email address"],
     },
-    follower: {
-      type: [Schema.Types.ObjectId],
-    },
+    follower: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     following: {
       type: [Schema.Types.ObjectId],
+      ref: "User",
     },
     upVotesItem: {
       type: [Schema.Types.ObjectId],

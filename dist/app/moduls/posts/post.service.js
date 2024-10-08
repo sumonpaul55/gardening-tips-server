@@ -22,8 +22,13 @@ const getVoteSummeryDb = (id) => __awaiter(void 0, void 0, void 0, function* () 
     const result = post_model_1.Post.aggregate([{ $match: { userId: id } }]);
     return result;
 });
+// get post by id
+const getPostByidDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield post_model_1.Post.findById(id).populate("userId").populate("category");
+});
 exports.postService = {
     makePostDb,
     getAllPost,
     getVoteSummeryDb,
+    getPostByidDb,
 };

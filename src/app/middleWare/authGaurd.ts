@@ -1,12 +1,12 @@
 import { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
-import { USER_ROLE } from "../router/moduls/User/user.constant";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../errors/AppError";
 import httpStatus from "http-status";
 import { verifyToken } from "../utils/verifyJWT";
 import config from "../config";
-import { User } from "../router/moduls/User/user.model";
+import { USER_ROLE } from "../moduls/User/user.constant";
+import { User } from "../moduls/User/user.model";
 
 const authGaurd = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {

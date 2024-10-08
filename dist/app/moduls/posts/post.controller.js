@@ -44,8 +44,19 @@ const getMyPostVoteSummery = (0, catchAsync_1.default)((req, res) => __awaiter(v
         data: result,
     });
 }));
+// get post by id
+const getPostByid = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield post_service_1.postService.getPostByidDb(req.params.id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Post retrive successfully",
+        data: result,
+    });
+}));
 exports.postController = {
     makePost,
     getPosts,
     getMyPostVoteSummery,
+    getPostByid,
 };

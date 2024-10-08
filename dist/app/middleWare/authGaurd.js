@@ -17,7 +17,7 @@ const AppError_1 = __importDefault(require("../errors/AppError"));
 const http_status_1 = __importDefault(require("http-status"));
 const verifyJWT_1 = require("../utils/verifyJWT");
 const config_1 = __importDefault(require("../config"));
-const user_model_1 = require("../router/moduls/User/user.model");
+const user_model_1 = require("../moduls/User/user.model");
 const authGaurd = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const token = req.headers.authorization;

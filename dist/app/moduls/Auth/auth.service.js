@@ -15,11 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authServices = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_1 = __importDefault(require("http-status"));
-const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = require("../User/user.model");
-const config_1 = __importDefault(require("../../config"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const verifyJWT_1 = require("../../utils/verifyJWT");
+const config_1 = __importDefault(require("../../config"));
 const registerUserDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     // check if the user is exist
     // if (file) {
@@ -91,7 +91,7 @@ const refreshTokenDb = (token) => __awaiter(void 0, void 0, void 0, function* ()
     return accessToken;
 });
 // update user
-const updateUserDb = (id, file, payload) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     // check if the user is exist
     // if (file) {
     // const imageName = `${Math.random() * 5 + Date.now() + payload.name}`;
@@ -102,6 +102,10 @@ const updateUserDb = (id, file, payload) => __awaiter(void 0, void 0, void 0, fu
     const isUserExist = yield user_model_1.User.findById(id);
     if (!isUserExist) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User not found withh this is");
+    }
+    // check image new url added
+    if (!payload.profilePhoto) {
+        payload.profilePhoto = isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.profilePhoto;
     }
     const newUser = yield user_model_1.User.findByIdAndUpdate(id, payload, { new: true, upsert: true });
     return newUser;
