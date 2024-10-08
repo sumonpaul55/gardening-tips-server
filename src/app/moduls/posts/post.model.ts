@@ -10,8 +10,8 @@ const postSchema = new Schema<TPost>({
   activity: [
     {
       userId: Schema.Types.ObjectId,
-      comment: String,
-      votes: Boolean,
+      comment: [String],
+      votes: { type: Boolean, default: false },
     },
   ],
   category: { type: Schema.Types.ObjectId, required: [true, "Post category is required"], ref: "Category" },

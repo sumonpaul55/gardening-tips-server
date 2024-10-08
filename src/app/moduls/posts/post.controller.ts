@@ -43,9 +43,30 @@ const getPostByid = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// get post by userId
+const getPostByUserId = catchAsync(async (req, res) => {
+  const result = await postService.getPostByUserIdDb(req.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Post retrive successfully",
+    data: result,
+  });
+});
+const handleVoting = catchAsync(async (req, res) => {
+  const result = await postService.handleVote(req.params.postId, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: result?.message,
+    data: null,
+  });
+});
 export const postController = {
   makePost,
   getPosts,
   getMyPostVoteSummery,
   getPostByid,
+  getPostByUserId,
+  handleVoting,
 };

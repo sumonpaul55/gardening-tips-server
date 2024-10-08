@@ -48,7 +48,7 @@ const addFollowerAndFolloing = async (payload: { email: string; userId: string }
       await User.findOneAndUpdate({ email: payload.email }, { $pull: { following: payload.userId } }, { new: true, upsert: true, session });
       await session.commitTransaction();
       await session.endSession();
-      return { message: "Unfollow Successfull" };
+      return { message: "fdsa Successfull" };
     }
   } catch (error: any) {
     await session.abortTransaction();
