@@ -47,6 +47,45 @@ const handleVote = async (postId: string, payload: { userId: string; votes: bool
   await Post.findOneAndUpdate({ _id: postId, "activity.userId": payload.userId }, { $set: { "activity.$.votes": payload.votes } }, { new: true });
   return { message: "voted successfully" };
 };
+
+const addComment = async (postId: string, payload: { userId: string; comment: string }) => {
+  const postExist = await Post.findById(postId);
+  const userExist = await User.findById(payload.userId);
+
+  if (!postExist || !userExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "Post or User not found");
+  }
+
+  // Check if the user has already commented on the post
+  const userAlreadyCommented = await Post.findOne({
+    _id: postId,
+    "activity.userId": payload.userId,
+  });
+
+  if (!userAlreadyCommented) {
+    // If the user has not commented, push a new entry to the activity array
+    await Post.findByIdAndUpdate(
+      postId,
+      {
+        $push: { activity: { userId: payload.userId, comment: [payload.comment] } },
+      },
+      { new: true }
+    );
+    return { message: "Comment added successfully" };
+  }
+
+  // If the user has already commented, update their comment by appending the new one
+  await Post.findOneAndUpdate(
+    { _id: postId, "activity.userId": payload.userId },
+    {
+      $push: { "activity.$.comment": [payload.comment] }, // Overwrite the existing comment with a new one
+    },
+    { new: true }
+  );
+
+  return { message: "Comment updated successfully" };
+};
+
 export const postService = {
   makePostDb,
   getAllPost,
@@ -54,4 +93,5 @@ export const postService = {
   getPostByidDb,
   getPostByUserIdDb,
   handleVote,
+  addComment,
 };

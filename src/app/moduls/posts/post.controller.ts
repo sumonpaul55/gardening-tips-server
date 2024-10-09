@@ -62,6 +62,15 @@ const handleVoting = catchAsync(async (req, res) => {
     data: null,
   });
 });
+const addComments = catchAsync(async (req, res) => {
+  const result = await postService.addComment(req.params.postId, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: result?.message,
+    data: null,
+  });
+});
 export const postController = {
   makePost,
   getPosts,
@@ -69,4 +78,5 @@ export const postController = {
   getPostByid,
   getPostByUserId,
   handleVoting,
+  addComments,
 };

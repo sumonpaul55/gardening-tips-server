@@ -10,4 +10,5 @@ router.get("/:id", postController.getPostByid);
 router.get("/postby-user/:id", postController.getPostByUserId);
 // router.get("/voteSummery", postController.getMyPostVoteSummery);
 router.put("/handle-voting/:postId", authGaurd(USER_ROLE.ADMIN, USER_ROLE.USER), postController.handleVoting);
+router.put("/handle-comment/:postId", authGaurd(USER_ROLE.ADMIN, USER_ROLE.USER), postController.addComments);
 export const postRouter = router;
