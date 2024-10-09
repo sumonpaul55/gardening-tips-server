@@ -7,9 +7,9 @@ export const postValidationSchema = z.object({
   activity: z
     .array(
       z.object({
-        userId: z.string().min(1, "User ID is required for activity"), // Each activity should have a userId
-        comment: z.string().min(1, "Comment is required"), // Ensure each comment is non-empty
-        votes: z.boolean(), // Validate that votes should be boolean (true/false)
+        userId: z.string().min(1, "User ID is required for activity").optional(), // Each activity should have a userId
+        votes: z.boolean().optional(), // Validate that votes should be boolean (true/false)
+        comment: z.array(z.string().min(1, "Comment is required")).optional(),
       })
     )
     .optional(), // Optional field for activity array

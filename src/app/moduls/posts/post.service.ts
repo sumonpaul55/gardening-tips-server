@@ -11,10 +11,11 @@ const makePostDb = async (payload: TPost) => {
 const getAllPost = async () => {
   return await Post.find().populate("userId").populate("category");
 };
-const getVoteSummeryDb = async (id: string) => {
-  const result = Post.aggregate([{ $match: { userId: id } }]);
-  return result;
-};
+// const getVoteSummeryDb = async (id: string) => {
+//   const result = Post.aggregate([{ $unwind: "$activity" }]);
+//   return result;
+// };
+
 // get post by id
 const getPostByidDb = async (id: string) => {
   return await Post.findById(id).populate("userId").populate("category");
@@ -31,19 +32,25 @@ const handleVote = async (postId: string, payload: { userId: string; votes: bool
   }
   const userAlreadyVoted = await Post.find({ _id: postId, "activity.userId": payload.userId });
   // console.log(userAlreadyVoted);
+  console.log(userAlreadyVoted);
   if (!userAlreadyVoted.length) {
     // downvotes
-    await Post.findByIdAndUpdate(postId, { "activity.userId": payload.userId, "activity.votes": payload.votes }, { new: true });
-    return { message: "Up voted successfully" };
+    await Post.findByIdAndUpdate(
+      postId,
+      {
+        $push: { activity: { userId: payload.userId, votes: payload.votes } },
+      },
+      { new: true }
+    );
+    return { message: "voted successfully" };
   }
-
-  await Post.findByIdAndUpdate(postId, { "activity.userId": payload.userId, "activity.votes": payload.votes }, { new: true });
-  return { message: "Down voted successfully" };
+  await Post.findOneAndUpdate({ _id: postId, "activity.userId": payload.userId }, { $set: { "activity.$.votes": payload.votes } }, { new: true });
+  return { message: "voted successfully" };
 };
 export const postService = {
   makePostDb,
   getAllPost,
-  getVoteSummeryDb,
+  // getVoteSummeryDb,
   getPostByidDb,
   getPostByUserIdDb,
   handleVote,

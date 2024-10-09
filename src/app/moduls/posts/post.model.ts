@@ -12,6 +12,7 @@ const postSchema = new Schema<TPost>({
       userId: Schema.Types.ObjectId,
       comment: [String],
       votes: { type: Boolean, default: false },
+      _id: false,
     },
   ],
   category: { type: Schema.Types.ObjectId, required: [true, "Post category is required"], ref: "Category" },

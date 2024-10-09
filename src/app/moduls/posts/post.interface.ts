@@ -5,12 +5,10 @@ export type TPost = {
   title: string;
   post: any;
   userId: Schema.Types.ObjectId;
-  activity?: [
-    {
-      userId: mongoose.Schema.Types.ObjectId;
-      comment: string;
-      votes: boolean;
-    }
-  ];
+  activity?: {
+    userId?: mongoose.Schema.Types.ObjectId;
+    comment?: string[];
+    votes?: boolean;
+  }[];
   category: mongoose.Schema.Types.ObjectId;
 };
