@@ -11,4 +11,5 @@ export type TPost = {
     votes?: boolean;
   }[];
   category: mongoose.Schema.Types.ObjectId;
+  premium?: boolean;
 };

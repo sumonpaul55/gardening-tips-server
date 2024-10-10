@@ -14,6 +14,7 @@ export const postValidationSchema = z.object({
     )
     .optional(), // Optional field for activity array
   category: z.string({ required_error: "Post category is required" }),
+  premium: z.boolean().optional(),
 });
 
 export type TPost = z.infer<typeof postValidationSchema>; // This infers the type from the schema

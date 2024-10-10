@@ -23,15 +23,15 @@ const getPosts = catchAsync(async (req, res) => {
   });
 });
 
-// const getMyPostVoteSummery = catchAsync(async (req, res) => {
-//   const result = await postService.getVoteSummeryDb(req.params.id);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Posts retrive successfully",
-//     data: result,
-//   });
-// });
+const postVoteSummery = catchAsync(async (req, res) => {
+  const result = await postService.getVoteSummeryDb(req.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Upvotes and dowVotes retrive",
+    data: result,
+  });
+});
 
 // get post by id
 const getPostByid = catchAsync(async (req, res) => {
@@ -74,7 +74,7 @@ const addComments = catchAsync(async (req, res) => {
 export const postController = {
   makePost,
   getPosts,
-  // getMyPostVoteSummery,
+  postVoteSummery,
   getPostByid,
   getPostByUserId,
   handleVoting,
