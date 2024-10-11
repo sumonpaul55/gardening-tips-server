@@ -14,4 +14,6 @@ export default {
   cloude_Name: process.env.cloud_name,
   cloud_Api_key: process.env.cloud_Api_key,
   cloud_Secret: process.env.cloudApi_Secret,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  client_site_url: process.env.CLIENT_SITE_URL,
 };

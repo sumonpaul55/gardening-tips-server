@@ -4,6 +4,22 @@ import httpStatus from "http-status";
 import { User } from "./user.model";
 import { startSession } from "mongoose";
 import AppError from "../../errors/AppError";
+import Stripe from "stripe";
+import config from "../../config";
+// strip related
+// stripe related
+const stripe = new Stripe(config.STRIPE_SECRET_KEY as string);
+const confiremPayment = async (payload: { paymentId: string; price: number }) => {
+  const { paymentId, price } = payload;
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: price * 100,
+    currency: "usd",
+    payment_method: paymentId,
+    confirm: true,
+    return_url: `${config.client_site_url}/success`,
+  });
+  return paymentIntent;
+};
 
 const getAllUserDb = async () => {
   return await User.find();
@@ -62,4 +78,5 @@ export const userService = {
   getUsebyEmailDb,
   getUsebyIdDb,
   addFollowerAndFolloing,
+  confiremPayment,
 };

@@ -7,6 +7,7 @@ import { userValidation } from "./user.validation";
 
 const router = Router();
 router.get("/", userController.getAlluser);
+router.post("/confirm-payment", userController.confirmPayment);
 router.get("/:email", authGaurd(USER_ROLE.USER, USER_ROLE.ADMIN), userController.getUserByEmail);
 router.get("/id/:id", userController.getUserById);
 router.put(
