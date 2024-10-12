@@ -4,14 +4,24 @@ import { TPost } from "./post.interface";
 import { Post } from "./post.model";
 import { User } from "../User/user.model";
 import mongoose from "mongoose";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 const makePostDb = async (payload: TPost) => {
   const result = await Post.create(payload);
   return result;
 };
-const getAllPost = async () => {
-  return await Post.find().populate("userId").populate("category");
+const getAllPost = async (query: Record<string, unknown>) => {
+  const postQuerys = new QueryBuilder(Post.find().populate("userId").populate("category"), query)
+    .search(["title", "post"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await postQuerys.modelQuery;
+  return result;
 };
+
 const getVoteSummeryDb = async (id: string) => {
   const result = await Post.aggregate([
     // Make sure to await the result
@@ -55,7 +65,6 @@ const handleVote = async (postId: string, payload: { userId: string; votes: bool
   }
   const userAlreadyVoted = await Post.find({ _id: postId, "activity.userId": payload.userId });
   // console.log(userAlreadyVoted);
-  console.log(userAlreadyVoted);
   if (!userAlreadyVoted.length) {
     // downvotes
     await Post.findByIdAndUpdate(
@@ -108,7 +117,14 @@ const addComment = async (postId: string, payload: { userId: string; comment: st
 
   return { message: "Comment updated successfully" };
 };
-
+const updatePostDb = async (postId: string, payload: TPost) => {
+  const result = await Post.findByIdAndUpdate(postId, payload, { new: true, runValidators: true });
+  return result;
+};
+const deletePost = async (postId: string) => {
+  const result = await Post.findByIdAndUpdate(postId, { isDeleted: true }, { new: true, runValidators: true });
+  return result;
+};
 export const postService = {
   makePostDb,
   getAllPost,
@@ -117,4 +133,6 @@ export const postService = {
   getPostByUserIdDb,
   handleVote,
   addComment,
+  updatePostDb,
+  deletePost,
 };

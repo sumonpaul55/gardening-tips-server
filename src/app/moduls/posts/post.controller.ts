@@ -14,7 +14,7 @@ const makePost = catchAsync(async (req, res) => {
 });
 
 const getPosts = catchAsync(async (req, res) => {
-  const result = await postService.getAllPost();
+  const result = await postService.getAllPost(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -71,6 +71,24 @@ const addComments = catchAsync(async (req, res) => {
     data: null,
   });
 });
+const updatePost = catchAsync(async (req, res) => {
+  const result = await postService.updatePostDb(req.params.postId, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Post updated successfully",
+    data: result,
+  });
+});
+const deletePostId = catchAsync(async (req, res) => {
+  const result = await postService.deletePost(req.params.postId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Post deleted successfully",
+    data: result,
+  });
+});
 export const postController = {
   makePost,
   getPosts,
@@ -79,4 +97,6 @@ export const postController = {
   getPostByUserId,
   handleVoting,
   addComments,
+  updatePost,
+  deletePostId,
 };

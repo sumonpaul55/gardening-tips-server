@@ -12,4 +12,5 @@ export type TPost = {
   }[];
   category: mongoose.Schema.Types.ObjectId;
   premium?: boolean;
+  isDeleted?: boolean;
 };
