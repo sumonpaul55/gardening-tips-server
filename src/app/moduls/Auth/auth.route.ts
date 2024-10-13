@@ -32,4 +32,12 @@ router.put(
   validateRequest(authValidation.updateUserValidationSchema),
   authController.updateUser
 );
+
+router.post(
+  "/change-password",
+  authGaurd(USER_ROLE.USER, USER_ROLE.ADMIN),
+  validateRequest(authValidation.changePasswordValidationSchema),
+  authController.changePassword
+);
+
 export const authRouter = router;

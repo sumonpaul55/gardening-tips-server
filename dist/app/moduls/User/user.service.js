@@ -21,6 +21,7 @@ const mongoose_1 = require("mongoose");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const stripe_1 = __importDefault(require("stripe"));
 const config_1 = __importDefault(require("../../config"));
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
 // strip related
 // stripe related
 const stripe = new stripe_1.default(config_1.default.STRIPE_SECRET_KEY);
@@ -35,8 +36,10 @@ const confiremPayment = (payload) => __awaiter(void 0, void 0, void 0, function*
     });
     return paymentIntent;
 });
-const getAllUserDb = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield user_model_1.User.find();
+const getAllUserDb = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const userQuery = new QueryBuilder_1.default(user_model_1.User.find({ isDeleted: false }), query).filter().sort().fields().fields();
+    const reslut = userQuery.modelQuery;
+    return reslut;
 });
 const getUsebyEmailDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.findOne({ email: payload });
@@ -86,10 +89,28 @@ const addFollowerAndFolloing = (payload) => __awaiter(void 0, void 0, void 0, fu
         throw new AppError_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, "Faild to following");
     }
 });
+const deleteUserDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(id);
+    return yield user_model_1.User.findByIdAndUpdate(id, { isDeleted: true }, { new: true, upsert: true });
+});
+const makeAdminUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const userExist = yield user_model_1.User.findOne({ _id: id });
+    if (!userExist) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User not found or role not matched");
+    }
+    if ((userExist === null || userExist === void 0 ? void 0 : userExist.role) === "USER") {
+        return yield user_model_1.User.findByIdAndUpdate(id, { role: "ADMIN" }, { new: true, runValidators: true });
+    }
+    if ((userExist === null || userExist === void 0 ? void 0 : userExist.role) === "ADMIN") {
+        return yield user_model_1.User.findByIdAndUpdate(id, { role: "USER" }, { new: true, runValidators: true });
+    }
+});
 exports.userService = {
     getAllUserDb,
     getUsebyEmailDb,
     getUsebyIdDb,
     addFollowerAndFolloing,
     confiremPayment,
+    deleteUserDb,
+    makeAdminUser,
 };

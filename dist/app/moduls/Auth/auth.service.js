@@ -20,6 +20,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const verifyJWT_1 = require("../../utils/verifyJWT");
 const config_1 = __importDefault(require("../../config"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const registerUserDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     // check if the user is exist
     // if (file) {
@@ -113,9 +114,31 @@ const updateUserDb = (id, payload) => __awaiter(void 0, void 0, void 0, function
     const newUser = yield user_model_1.User.findByIdAndUpdate(id, payload, { new: true, upsert: true });
     return newUser;
 });
+// change password -------------------------------------------------==============================================================================
+const changePassword = (userData, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    // checking if the user is exist
+    const user = yield user_model_1.User.isUserExistsByEmail(userData.email);
+    if (!user) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "This user is not found!");
+    }
+    //checking if the password is correct
+    if (!(yield user_model_1.User.isPasswordMatched(payload.oldPassword, user === null || user === void 0 ? void 0 : user.password)))
+        throw new AppError_1.default(http_status_1.default.FORBIDDEN, "Password do not matched");
+    //hash new password
+    const newHashedPassword = yield bcryptjs_1.default.hash(payload.newPassword, Number(config_1.default.bcrypt_salt_rounds));
+    yield user_model_1.User.findOneAndUpdate({
+        email: userData.email,
+        role: userData.role,
+    }, {
+        password: newHashedPassword,
+        passwordChangedAt: new Date(),
+    });
+    return null;
+});
 exports.authServices = {
     registerUserDb,
     loginToDb,
     refreshTokenDb,
     updateUserDb,
+    changePassword,
 };

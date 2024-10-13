@@ -15,7 +15,7 @@ const confirmPayment = catchAsync(async (req, res) => {
 });
 
 const getAlluser = catchAsync(async (req, res) => {
-  const result = await userService.getAllUserDb();
+  const result = await userService.getAllUserDb(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -50,5 +50,23 @@ const followUnfollow = catchAsync(async (req, res) => {
     data: null,
   });
 });
+const deleteUser = catchAsync(async (req, res) => {
+  const reslut = await userService.deleteUserDb(req.params?.userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User Deleted Successfully",
+    data: reslut,
+  });
+});
+const makeAdminUser = catchAsync(async (req, res) => {
+  const reslut = await userService.makeAdminUser(req.params?.userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User Updated Successfully",
+    data: reslut,
+  });
+});
 
-export const userController = { getAlluser, getUserByEmail, getUserById, followUnfollow, confirmPayment };
+export const userController = { getAlluser, getUserByEmail, getUserById, followUnfollow, confirmPayment, deleteUser, makeAdminUser };

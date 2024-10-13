@@ -51,4 +51,5 @@ router.put("/update-user/:id",
 //   next();
 // },
 (0, authGaurd_1.default)(user_constant_1.USER_ROLE.ADMIN, user_constant_1.USER_ROLE.USER), (0, validateRequest_1.default)(auth_validation_1.authValidation.updateUserValidationSchema), auth_controler_1.authController.updateUser);
+router.post("/change-password", (0, authGaurd_1.default)(user_constant_1.USER_ROLE.USER, user_constant_1.USER_ROLE.ADMIN), (0, validateRequest_1.default)(auth_validation_1.authValidation.changePasswordValidationSchema), auth_controler_1.authController.changePassword);
 exports.authRouter = router;

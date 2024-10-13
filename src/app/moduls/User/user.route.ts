@@ -16,5 +16,6 @@ router.put(
   validateRequest(userValidation.followUnfollowValidationSchema),
   userController.followUnfollow
 );
-
+router.delete("/delete/:userId", authGaurd(USER_ROLE.ADMIN), userController.deleteUser);
+router.patch("/user-admin/:userId", authGaurd(USER_ROLE.ADMIN), userController.makeAdminUser);
 export const userRoute = router;

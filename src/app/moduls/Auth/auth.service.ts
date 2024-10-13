@@ -6,7 +6,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import AppError from "../../errors/AppError";
 import { createToken } from "../../utils/verifyJWT";
 import config from "../../config";
-
+import bcrypt from "bcryptjs";
 const registerUserDb = async (payload: TregisterUser) => {
   // check if the user is exist
 
@@ -108,9 +108,42 @@ const updateUserDb = async (id: string, payload: TregisterUser) => {
   const newUser = await User.findByIdAndUpdate(id, payload, { new: true, upsert: true });
   return newUser;
 };
+
+// change password -------------------------------------------------==============================================================================
+
+const changePassword = async (userData: JwtPayload, payload: { oldPassword: string; newPassword: string }) => {
+  // checking if the user is exist
+  const user = await User.isUserExistsByEmail(userData.email);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "This user is not found!");
+  }
+
+  //checking if the password is correct
+
+  if (!(await User.isPasswordMatched(payload.oldPassword, user?.password))) throw new AppError(httpStatus.FORBIDDEN, "Password do not matched");
+
+  //hash new password
+  const newHashedPassword = await bcrypt.hash(payload.newPassword, Number(config.bcrypt_salt_rounds));
+
+  await User.findOneAndUpdate(
+    {
+      email: userData.email,
+      role: userData.role,
+    },
+    {
+      password: newHashedPassword,
+      passwordChangedAt: new Date(),
+    }
+  );
+
+  return null;
+};
+
 export const authServices = {
   registerUserDb,
   loginToDb,
   refreshTokenDb,
   updateUserDb,
+  changePassword,
 };

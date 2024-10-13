@@ -6,6 +6,7 @@ import { startSession } from "mongoose";
 import AppError from "../../errors/AppError";
 import Stripe from "stripe";
 import config from "../../config";
+import QueryBuilder from "../../builder/QueryBuilder";
 // strip related
 // stripe related
 const stripe = new Stripe(config.STRIPE_SECRET_KEY as string);
@@ -21,8 +22,10 @@ const confiremPayment = async (payload: { paymentId: string; price: number }) =>
   return paymentIntent;
 };
 
-const getAllUserDb = async () => {
-  return await User.find();
+const getAllUserDb = async (query: any) => {
+  const userQuery = new QueryBuilder(User.find({ isDeleted: false }), query).filter().sort().fields().fields();
+  const reslut = userQuery.modelQuery;
+  return reslut;
 };
 const getUsebyEmailDb = async (payload: string) => {
   const result = await User.findOne({ email: payload });
@@ -72,11 +75,28 @@ const addFollowerAndFolloing = async (payload: { email: string; userId: string }
     throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Faild to following");
   }
 };
-
+const deleteUserDb = async (id: string) => {
+  console.log(id);
+  return await User.findByIdAndUpdate(id, { isDeleted: true }, { new: true, upsert: true });
+};
+const makeAdminUser = async (id: string) => {
+  const userExist = await User.findOne({ _id: id });
+  if (!userExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found or role not matched");
+  }
+  if (userExist?.role === "USER") {
+    return await User.findByIdAndUpdate(id, { role: "ADMIN" }, { new: true, runValidators: true });
+  }
+  if (userExist?.role === "ADMIN") {
+    return await User.findByIdAndUpdate(id, { role: "USER" }, { new: true, runValidators: true });
+  }
+};
 export const userService = {
   getAllUserDb,
   getUsebyEmailDb,
   getUsebyIdDb,
   addFollowerAndFolloing,
   confiremPayment,
+  deleteUserDb,
+  makeAdminUser,
 };

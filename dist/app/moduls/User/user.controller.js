@@ -28,7 +28,7 @@ const confirmPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
     });
 }));
 const getAlluser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.userService.getAllUserDb();
+    const result = yield user_service_1.userService.getAllUserDb(req.query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -64,4 +64,24 @@ const followUnfollow = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         data: null,
     });
 }));
-exports.userController = { getAlluser, getUserByEmail, getUserById, followUnfollow, confirmPayment };
+const deleteUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const reslut = yield user_service_1.userService.deleteUserDb((_a = req.params) === null || _a === void 0 ? void 0 : _a.userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User Deleted Successfully",
+        data: reslut,
+    });
+}));
+const makeAdminUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const reslut = yield user_service_1.userService.makeAdminUser((_a = req.params) === null || _a === void 0 ? void 0 : _a.userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User Updated Successfully",
+        data: reslut,
+    });
+}));
+exports.userController = { getAlluser, getUserByEmail, getUserById, followUnfollow, confirmPayment, deleteUser, makeAdminUser };

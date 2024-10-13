@@ -87,6 +87,7 @@ const userSchema = new mongoose_1.Schema({
         ],
     },
     address: { type: String, default: "" },
+    isDeleted: { type: Boolean, default: false },
 }, {
     timestamps: true,
     virtuals: true,

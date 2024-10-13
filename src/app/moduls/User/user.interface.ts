@@ -22,6 +22,7 @@ export type TUser = {
     url?: string;
   }[];
   address?: string;
+  isDeleted?: boolean;
 };
 
 export interface IUserModel extends Model<TUser> {
