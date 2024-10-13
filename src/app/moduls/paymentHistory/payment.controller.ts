@@ -8,7 +8,7 @@ const createPaymentHistory = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Payment Created successfully",
+    message: "payment recived and user verified",
     data: result,
   });
 });

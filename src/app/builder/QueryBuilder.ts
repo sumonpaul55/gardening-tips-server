@@ -61,6 +61,24 @@ class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.select(fields);
     return this;
   }
+  // category
+  category() {
+    if (this.query.category) {
+      this.modelQuery = this.modelQuery.find({
+        category: this.query.category,
+      });
+    }
+    return this;
+  }
+  // category
+  premium() {
+    if (this.query.premium) {
+      this.modelQuery = this.modelQuery.find({
+        premium: this.query.premium,
+      });
+    }
+    return this;
+  }
   async countTotal() {
     const totalQueries = this.modelQuery.getFilter();
     const total = await this.modelQuery.model.countDocuments(totalQueries);

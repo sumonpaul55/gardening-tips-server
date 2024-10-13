@@ -19,6 +19,22 @@ const http_status_1 = __importDefault(require("http-status"));
 const user_model_1 = require("./user.model");
 const mongoose_1 = require("mongoose");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
+const stripe_1 = __importDefault(require("stripe"));
+const config_1 = __importDefault(require("../../config"));
+// strip related
+// stripe related
+const stripe = new stripe_1.default(config_1.default.STRIPE_SECRET_KEY);
+const confiremPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { paymentId, price } = payload;
+    const paymentIntent = yield stripe.paymentIntents.create({
+        amount: price * 100,
+        currency: "usd",
+        payment_method: paymentId,
+        confirm: true,
+        return_url: `${config_1.default.client_site_url}/success`,
+    });
+    return paymentIntent;
+});
 const getAllUserDb = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield user_model_1.User.find();
 });
@@ -40,10 +56,11 @@ const addFollowerAndFolloing = (payload) => __awaiter(void 0, void 0, void 0, fu
     try {
         session.startTransaction();
         // check the the follower already following or not
-        const alreadyFollowing = user_model_1.User.findOne({
+        const alreadyFollowing = yield user_model_1.User.findOne({
             _id: payload.userId,
             follower: followingUser._id,
         });
+        // console.log(alreadyFollowing);
         // add to follower
         if (!alreadyFollowing) {
             yield user_model_1.User.findByIdAndUpdate(payload.userId, { follower: followingUser === null || followingUser === void 0 ? void 0 : followingUser._id }, { new: true, upsert: true, session });
@@ -53,13 +70,15 @@ const addFollowerAndFolloing = (payload) => __awaiter(void 0, void 0, void 0, fu
             yield session.endSession();
             return { message: "Following successfull" };
         }
-        // remove follower if already following or unfollow
-        yield user_model_1.User.findByIdAndUpdate(followedUser._id, { $pull: { follower: followedUser._id } }, { new: true, session });
-        // remove form own following
-        yield user_model_1.User.findOneAndUpdate({ email: payload.email }, { $pull: { following: payload.userId } }, { new: true, upsert: true, session });
-        yield session.commitTransaction();
-        yield session.endSession();
-        return { message: "Unfollow Successfull" };
+        else {
+            // remove follower if already following or unfollow
+            yield user_model_1.User.findByIdAndUpdate(followedUser._id, { $pull: { follower: followingUser._id } }, { new: true, upsert: true, session });
+            // remove form own following
+            yield user_model_1.User.findOneAndUpdate({ email: payload.email }, { $pull: { following: payload.userId } }, { new: true, upsert: true, session });
+            yield session.commitTransaction();
+            yield session.endSession();
+            return { message: "fdsa Successfull" };
+        }
     }
     catch (error) {
         yield session.abortTransaction();
@@ -72,4 +91,5 @@ exports.userService = {
     getUsebyEmailDb,
     getUsebyIdDb,
     addFollowerAndFolloing,
+    confiremPayment,
 };

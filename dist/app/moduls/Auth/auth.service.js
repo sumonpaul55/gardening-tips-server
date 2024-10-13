@@ -39,6 +39,7 @@ const registerUserDb = (payload) => __awaiter(void 0, void 0, void 0, function* 
         email: newUser === null || newUser === void 0 ? void 0 : newUser.email,
         phoneNumber: newUser === null || newUser === void 0 ? void 0 : newUser.phoneNumber,
         role: newUser === null || newUser === void 0 ? void 0 : newUser.role,
+        verified: newUser === null || newUser === void 0 ? void 0 : newUser.verified,
     };
     const accessToken = (0, verifyJWT_1.createToken)(tokenPayload, config_1.default.accessTokenSecret, config_1.default.accessTokenExpiresIn);
     const refreshToken = (0, verifyJWT_1.createToken)(tokenPayload, config_1.default.jwtRefreshSecret, config_1.default.refreshTokenExpireIn);
@@ -62,6 +63,7 @@ const loginToDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         email: user === null || user === void 0 ? void 0 : user.email,
         phoneNumber: user === null || user === void 0 ? void 0 : user.phoneNumber,
         role: user === null || user === void 0 ? void 0 : user.role,
+        verified: user === null || user === void 0 ? void 0 : user.verified,
     };
     const accessToken = (0, verifyJWT_1.createToken)(tokenPayload, config_1.default.accessTokenSecret, config_1.default.accessTokenExpiresIn);
     const refreshToken = (0, verifyJWT_1.createToken)(tokenPayload, config_1.default.jwtRefreshSecret, config_1.default.refreshTokenExpireIn);
@@ -86,6 +88,7 @@ const refreshTokenDb = (token) => __awaiter(void 0, void 0, void 0, function* ()
         email: user === null || user === void 0 ? void 0 : user.email,
         phoneNumber: user === null || user === void 0 ? void 0 : user.phoneNumber,
         role: user === null || user === void 0 ? void 0 : user.role,
+        verified: user === null || user === void 0 ? void 0 : user.verified,
     };
     const accessToken = (0, verifyJWT_1.createToken)(tokenPayload, config_1.default.accessTokenSecret, config_1.default.accessTokenExpiresIn);
     return accessToken;

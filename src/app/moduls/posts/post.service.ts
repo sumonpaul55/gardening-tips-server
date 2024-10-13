@@ -11,12 +11,13 @@ const makePostDb = async (payload: TPost) => {
   return result;
 };
 const getAllPost = async (query: Record<string, unknown>) => {
-  const postQuerys = new QueryBuilder(Post.find().populate("userId").populate("category"), query)
+  const postQuerys = new QueryBuilder(Post.find({ isDeleted: false }).populate("userId").populate("category"), query)
     .search(["title", "post"])
     .filter()
     .sort()
     .paginate()
-    .fields();
+    .fields()
+    .premium();
 
   const result = await postQuerys.modelQuery;
   return result;
@@ -54,7 +55,7 @@ const getPostByidDb = async (id: string) => {
   return await Post.findById(id).populate("userId").populate("category").populate("activity.userId").sort("createdAt");
 };
 const getPostByUserIdDb = async (id: string) => {
-  const result = await Post.find({ userId: id }).populate("userId").populate("category").populate("activity.userId");
+  const result = await Post.find({ userId: id, isDeleted: false }).populate("userId").populate("category").populate("activity.userId");
   return result;
 };
 const handleVote = async (postId: string, payload: { userId: string; votes: boolean }) => {
@@ -125,6 +126,10 @@ const deletePost = async (postId: string) => {
   const result = await Post.findByIdAndUpdate(postId, { isDeleted: true }, { new: true, runValidators: true });
   return result;
 };
+
+const getTotalPostCount = async () => {
+  return await Post.countDocuments({ isDeleted: { $ne: true } });
+};
 export const postService = {
   makePostDb,
   getAllPost,
@@ -135,4 +140,5 @@ export const postService = {
   addComment,
   updatePostDb,
   deletePost,
+  getTotalPostCount,
 };

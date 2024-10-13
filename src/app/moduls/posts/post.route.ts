@@ -2,12 +2,14 @@ import { Router } from "express";
 import { postController } from "./post.controller";
 import authGaurd from "../../middleWare/authGaurd";
 import { USER_ROLE } from "../User/user.constant";
+
 import validateRequest from "../../middleWare/validateRequest";
 import { postUpdateValidationSchema } from "./postValidation";
 
 const router = Router();
-router.post("/", authGaurd(USER_ROLE.USER), postController.makePost);
+router.post("/", authGaurd(USER_ROLE.USER, USER_ROLE.ADMIN), postController.makePost);
 router.get("/", postController.getPosts);
+router.get("/total-post", postController.postCount);
 router.get("/:id", postController.getPostByid);
 router.get("/postby-user/:id", postController.getPostByUserId);
 router.get("/voteSummery/:id", postController.postVoteSummery);

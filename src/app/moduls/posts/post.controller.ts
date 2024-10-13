@@ -89,6 +89,15 @@ const deletePostId = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const postCount = catchAsync(async (req, res) => {
+  const result = await postService.getTotalPostCount();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Total post count got",
+    data: result,
+  });
+});
 export const postController = {
   makePost,
   getPosts,
@@ -99,4 +108,5 @@ export const postController = {
   addComments,
   updatePost,
   deletePostId,
+  postCount,
 };

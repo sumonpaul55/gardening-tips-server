@@ -12,6 +12,7 @@ const validateRequest_1 = __importDefault(require("../../middleWare/validateRequ
 const user_validation_1 = require("./user.validation");
 const router = (0, express_1.Router)();
 router.get("/", user_controller_1.userController.getAlluser);
+router.post("/confirm-payment", user_controller_1.userController.confirmPayment);
 router.get("/:email", (0, authGaurd_1.default)(user_constant_1.USER_ROLE.USER, user_constant_1.USER_ROLE.ADMIN), user_controller_1.userController.getUserByEmail);
 router.get("/id/:id", user_controller_1.userController.getUserById);
 router.put("/follow-unfollow", (0, authGaurd_1.default)(user_constant_1.USER_ROLE.ADMIN, user_constant_1.USER_ROLE.USER), (0, validateRequest_1.default)(user_validation_1.userValidation.followUnfollowValidationSchema), user_controller_1.userController.followUnfollow);

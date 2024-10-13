@@ -2,11 +2,16 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TPayment } from "./payment.interface";
 import { Payments } from "./payment.model";
+import { User } from "../User/user.model";
 
 const paymentHistoryDb = async (payload: TPayment) => {
-  if (payload.paymentId) {
-    return await Payments.create(payload);
-  } else throw new AppError(httpStatus.NOT_FOUND, "transction id not found");
+  const userExist = User.isUserExistsByEmail(payload.email);
+  if (!userExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  const paymentHistory = await Payments.create(payload);
+  await User.findOneAndUpdate({ email: payload.email }, { verified: true }, { new: true, runValidators: true, upsert: true });
+  return paymentHistory;
 };
 
 export const paymentService = {

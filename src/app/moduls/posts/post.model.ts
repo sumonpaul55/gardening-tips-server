@@ -18,7 +18,7 @@ const postSchema = new Schema<TPost>(
     ],
     category: { type: Schema.Types.ObjectId, required: [true, "Post category is required"], ref: "Category" },
     premium: { type: Boolean, default: false },
-    isDeleted: { type: Boolean },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

@@ -1,12 +1,14 @@
 import { z } from "zod";
 import mongoose from "mongoose";
-import { paymentValidation } from "./paymentValidation";
+import { paymentzodValidation } from "./paymentValidation";
 
 export type TPayment = {
-  user: mongoose.Types.ObjectId;
-  paymentId: string;
+  userId: mongoose.Types.ObjectId;
+  name: string;
+  transactionId: string;
   paymentTime: number;
+  email: string;
   isDeleted?: boolean;
 };
 
-export type TBookingInfer = z.infer<typeof paymentValidation.paymentValidationschema>;
+export type TBookingInfer = z.infer<typeof paymentzodValidation>;

@@ -30,6 +30,7 @@ const registerUserDb = async (payload: TregisterUser) => {
     email: newUser?.email,
     phoneNumber: newUser?.phoneNumber,
     role: newUser?.role,
+    verified: newUser?.verified,
   };
   const accessToken = createToken(tokenPayload, config.accessTokenSecret as string, config.accessTokenExpiresIn as string);
   const refreshToken = createToken(tokenPayload, config.jwtRefreshSecret as string, config.refreshTokenExpireIn as string);
@@ -54,6 +55,7 @@ const loginToDb = async (payload: TLoginUser) => {
     email: user?.email,
     phoneNumber: user?.phoneNumber,
     role: user?.role,
+    verified: user?.verified,
   };
   const accessToken = createToken(tokenPayload, config.accessTokenSecret as string, config.accessTokenExpiresIn as string);
   const refreshToken = createToken(tokenPayload, config.jwtRefreshSecret as string, config.refreshTokenExpireIn as string);
@@ -79,6 +81,7 @@ const refreshTokenDb = async (token: string) => {
     email: user?.email,
     phoneNumber: user?.phoneNumber,
     role: user?.role,
+    verified: user?.verified,
   };
   const accessToken = createToken(tokenPayload, config.accessTokenSecret as string, config.accessTokenExpiresIn as string);
   return accessToken;
