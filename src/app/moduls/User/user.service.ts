@@ -10,6 +10,7 @@ import QueryBuilder from "../../builder/QueryBuilder";
 // strip related
 // stripe related
 const stripe = new Stripe(config.STRIPE_SECRET_KEY as string);
+
 const confiremPayment = async (payload: { paymentId: string; price: number }) => {
   const { paymentId, price } = payload;
   const paymentIntent = await stripe.paymentIntents.create({

@@ -12,7 +12,17 @@ const createPaymentHistory = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getPaymenthistory = catchAsync(async (req, res) => {
+  const result = await paymentService.getAllPaymentHistory();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "payment recived and user verified",
+    data: result,
+  });
+});
 
 export const paymenController = {
   createPaymentHistory,
+  getPaymenthistory,
 };

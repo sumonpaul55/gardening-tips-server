@@ -14,6 +14,11 @@ const paymentHistoryDb = async (payload: TPayment) => {
   return paymentHistory;
 };
 
+const getAllPaymentHistory = async () => {
+  return await Payments.find({ isDeleted: false }).populate("userId");
+};
+
 export const paymentService = {
   paymentHistoryDb,
+  getAllPaymentHistory,
 };

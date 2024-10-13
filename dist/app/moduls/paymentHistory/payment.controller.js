@@ -26,6 +26,16 @@ const createPaymentHistory = (0, catchAsync_1.default)((req, res) => __awaiter(v
         data: result,
     });
 }));
+const getPaymenthistory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield payment_service_1.paymentService.getAllPaymentHistory();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "payment recived and user verified",
+        data: result,
+    });
+}));
 exports.paymenController = {
     createPaymentHistory,
+    getPaymenthistory,
 };

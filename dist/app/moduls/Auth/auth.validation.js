@@ -56,7 +56,7 @@ const changePasswordValidationSchema = zod_1.z.object({
         oldPassword: zod_1.z.string({
             required_error: "Old password is required",
         }),
-        newPassword: zod_1.z.string({ required_error: "Password is required" }),
+        newPassword: zod_1.z.string({ required_error: "Password is required" }).min(6, "new password minimum 6 character"),
     }),
 });
 exports.authValidation = {

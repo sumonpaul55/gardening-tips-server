@@ -26,6 +26,10 @@ const paymentHistoryDb = (payload) => __awaiter(void 0, void 0, void 0, function
     yield user_model_1.User.findOneAndUpdate({ email: payload.email }, { verified: true }, { new: true, runValidators: true, upsert: true });
     return paymentHistory;
 });
+const getAllPaymentHistory = () => __awaiter(void 0, void 0, void 0, function* () {
+    return yield payment_model_1.Payments.find({ isDeleted: false }).populate("userId");
+});
 exports.paymentService = {
     paymentHistoryDb,
+    getAllPaymentHistory,
 };
