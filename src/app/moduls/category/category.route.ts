@@ -7,7 +7,7 @@ import { categoryController } from "./category.controller";
 
 const router = Router();
 
-router.post("/", authGaurd(USER_ROLE.USER), validateRequest(categoryValidation.categoryValidationSchema), categoryController.createCatergory);
-router.get("/", authGaurd(USER_ROLE.USER, USER_ROLE.ADMIN), categoryController.getAllCategory);
+router.post("/", authGaurd(USER_ROLE.ADMIN), validateRequest(categoryValidation.categoryValidationSchema), categoryController.createCatergory);
+router.get("/", categoryController.getAllCategory);
 
 export const categoryRouter = router;
