@@ -1,8 +1,6 @@
 import { z } from "zod";
 import mongoose from "mongoose";
-const ObjectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, {
-  message: 'Invalid ObjectId format',
-});
+
 export const userSchema = z.object({
   _id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
