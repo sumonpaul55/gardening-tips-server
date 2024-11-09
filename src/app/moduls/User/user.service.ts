@@ -29,7 +29,7 @@ const getAllUserDb = async (query: any) => {
   return reslut;
 };
 const getUsebyEmailDb = async (payload: string) => {
-  const result = await User.findOne({ email: payload });
+  const result = await User.findOne({ email: payload }).populate("following");
   return result;
 };
 const getUsebyIdDb = async (id: string) => {

@@ -27,13 +27,12 @@ const userSchema = new Schema<TUser, IUserModel>(
         ref: "User",
       },
     ],
-    following: {
-      type: [Schema.Types.ObjectId],
-      ref: "User",
-    },
-    upVotesItem: {
-      type: [Schema.Types.ObjectId],
-    },
+    following: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    upVotesItem: [
+      {
+        type: Schema.Types.ObjectId,
+      },
+    ],
     downVotesItem: {
       type: [Schema.Types.ObjectId],
     },
@@ -53,10 +52,23 @@ const userSchema = new Schema<TUser, IUserModel>(
       type: String,
       required: true,
     },
-
     profilePhoto: {
       type: String,
       default: null,
+    },
+    friends: {
+      sent: [
+        {
+          type: Schema.Types.ObjectId, ref: "User", 
+          status: {type: String, enum: ['unconfirmed', 'confirmed', ]}
+        }
+      ],
+      received: [
+        {
+          type: Schema.Types.ObjectId, ref: "User", 
+          status: {type: String, enum: ['unconfirmed', 'confirmed', ]}
+        }
+      ],
     },
     links: {
       type: [

@@ -1,6 +1,6 @@
-import mongoose, { Model } from "mongoose";
+import mongoose, { Model, Types } from "mongoose";
 import { USER_ROLE } from "./user.constant";
-
+type FriendStatus = 'confirmed' |  'unconfirmed';
 export type TUser = {
   _id?: string;
   name: string;
@@ -17,6 +17,17 @@ export type TUser = {
   profilePhoto?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  friends?: {
+    sent?: {
+      id: Types.ObjectId; // MongoDB ObjectId type
+      status: FriendStatus;
+    }[];
+    received?: {
+      id: Types.ObjectId; // MongoDB ObjectId type
+      status: FriendStatus;
+    }[];
+  },
+   
   links?: {
     socialName?: string;
     url?: string;
@@ -24,6 +35,8 @@ export type TUser = {
   address?: string;
   isDeleted?: boolean;
 };
+
+
 
 export interface IUserModel extends Model<TUser> {
   isUserExistsByEmail(id: string): Promise<TUser>;

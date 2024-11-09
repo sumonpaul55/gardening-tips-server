@@ -1,6 +1,8 @@
 import { z } from "zod";
 import mongoose from "mongoose";
-
+const ObjectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, {
+  message: 'Invalid ObjectId format',
+});
 export const userSchema = z.object({
   _id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
@@ -13,6 +15,20 @@ export const userSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
   phoneNumber: z.string().optional(),
   profilePhoto: z.string().url("Invalid URL").optional(),
+  friends: z.object({
+    sent: z.array(
+      z.object({
+        type: z.string().regex(/^[a-f\d]{24}$/i, { message: 'Invalid ObjectId format' }), // ObjectId validation
+        status: z.enum(['unconfirmed', 'confirmed']), // Enum for status
+      })
+    ),
+    received: z.array(
+      z.object({
+        type: z.string().regex(/^[a-f\d]{24}$/i, { message: 'Invalid ObjectId format' }), // ObjectId validation
+        status: z.enum(['unconfirmed', 'confirmed']), // Enum for status
+      })
+    ),
+  }),
 });
 
 export type TUser = z.infer<typeof userSchema>;
@@ -27,3 +43,5 @@ const followUnfollowValidationSchema = z.object({
 export const userValidation = {
   followUnfollowValidationSchema,
 };
+
+

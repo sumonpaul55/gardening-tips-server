@@ -81,6 +81,7 @@ const refreshTokenDb = async (token: string) => {
     email: user?.email,
     phoneNumber: user?.phoneNumber,
     role: user?.role,
+
     verified: user?.verified,
   };
   const accessToken = createToken(tokenPayload, config.accessTokenSecret as string, config.accessTokenExpiresIn as string);
