@@ -33,7 +33,7 @@ const getUsebyEmailDb = async (payload: string) => {
   return result;
 };
 const getUsebyIdDb = async (id: string) => {
-  const result = await User.findById(id);
+  const result = await User.findById(id).populate("following").populate("follower");
   return result;
 };
 
@@ -68,7 +68,7 @@ const addFollowerAndFolloing = async (payload: { email: string; userId: string }
       await User.findOneAndUpdate({ email: payload.email }, { $pull: { following: payload.userId } }, { new: true, upsert: true, session });
       await session.commitTransaction();
       await session.endSession();
-      return { message: "fdsa Successfull" };
+      return { message: "Unfollow Successfull" };
     }
   } catch (error: any) {
     await session.abortTransaction();
@@ -92,6 +92,48 @@ const makeAdminUser = async (id: string) => {
     return await User.findByIdAndUpdate(id, { role: "USER" }, { new: true, runValidators: true });
   }
 };
+
+// handle add friend and remove friend
+const addFriendAndRemoveFriendDB = async (payload: { email: string; userId: string }) => {
+  const followingUser = await User.findOne({ email: payload.email });
+  const followedUser = await User.findById(payload.userId);
+  if (!followingUser || !followedUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "One or more user not found");
+  }
+
+  const session = await startSession();
+  try {
+    session.startTransaction();
+    // check the the follower already following or not
+    const alreadyfriend = await User.findOne({
+      _id: payload.userId,
+      friends: followingUser._id,
+    });
+    // console.log(alreadyFollowing);
+    // add to follower
+    if (!alreadyfriend) {
+      await User.findByIdAndUpdate(payload.userId, { follower: followingUser?._id }, { new: true, upsert: true, session });
+      // update who is follwoing update his folloing
+      await User.findOneAndUpdate({ email: payload.email }, { $addToSet: { following: payload.userId } }, { new: true, upsert: true, session });
+      await session.commitTransaction();
+      await session.endSession();
+      return { message: "Following successfull" };
+    } else {
+      // remove follower if already following or unfollow
+      await User.findByIdAndUpdate(followedUser._id, { $pull: { follower: followingUser._id } }, { new: true, upsert: true, session });
+      // remove form own following
+      await User.findOneAndUpdate({ email: payload.email }, { $pull: { following: payload.userId } }, { new: true, upsert: true, session });
+      await session.commitTransaction();
+      await session.endSession();
+      return { message: "Unfollow Successfull" };
+    }
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Faild to following");
+  }
+};
+
 export const userService = {
   getAllUserDb,
   getUsebyEmailDb,

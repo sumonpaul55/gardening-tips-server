@@ -18,6 +18,10 @@ exports.userSchema = zod_1.z.object({
     password: zod_1.z.string().min(6, "Password must be at least 6 characters"),
     phoneNumber: zod_1.z.string().optional(),
     profilePhoto: zod_1.z.string().url("Invalid URL").optional(),
+    friends: zod_1.z.object({
+        type: zod_1.z.string(), // Assuming `type` is just a string representation of `ObjectId` for validation
+        status: zod_1.z.enum(["confirmed", "pendding"]).default("pendding"),
+    }),
 });
 const followUnfollowValidationSchema = zod_1.z.object({
     body: zod_1.z.object({

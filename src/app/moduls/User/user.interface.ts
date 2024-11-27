@@ -1,6 +1,6 @@
 import mongoose, { Model, Types } from "mongoose";
 import { USER_ROLE } from "./user.constant";
-type FriendStatus = 'confirmed' |  'unconfirmed';
+type FriendStatus = 'confirmed' |  'pendding';
 export type TUser = {
   _id?: string;
   name: string;

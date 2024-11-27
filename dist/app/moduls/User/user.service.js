@@ -42,11 +42,11 @@ const getAllUserDb = (query) => __awaiter(void 0, void 0, void 0, function* () {
     return reslut;
 });
 const getUsebyEmailDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.findOne({ email: payload });
+    const result = yield user_model_1.User.findOne({ email: payload }).populate("following");
     return result;
 });
 const getUsebyIdDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.findById(id);
+    const result = yield user_model_1.User.findById(id).populate("following").populate("follower");
     return result;
 });
 const addFollowerAndFolloing = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -80,7 +80,7 @@ const addFollowerAndFolloing = (payload) => __awaiter(void 0, void 0, void 0, fu
             yield user_model_1.User.findOneAndUpdate({ email: payload.email }, { $pull: { following: payload.userId } }, { new: true, upsert: true, session });
             yield session.commitTransaction();
             yield session.endSession();
-            return { message: "fdsa Successfull" };
+            return { message: "Unfollow Successfull" };
         }
     }
     catch (error) {

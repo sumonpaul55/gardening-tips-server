@@ -21,12 +21,7 @@ const userSchema = new Schema<TUser, IUserModel>(
       //validate email
       //   match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, "Please fill a valid email address"],
     },
-    follower: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    follower: [{ type: Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
     upVotesItem: [
       {
@@ -56,20 +51,13 @@ const userSchema = new Schema<TUser, IUserModel>(
       type: String,
       default: null,
     },
-    friends: {
-      sent: [
-        {
-          type: Schema.Types.ObjectId, ref: "User", 
-          status: {type: String, enum: ['unconfirmed', 'confirmed', ]}
-        }
-      ],
-      received: [
-        {
-          type: Schema.Types.ObjectId, ref: "User", 
-          status: {type: String, enum: ['unconfirmed', 'confirmed', ]}
-        }
-      ],
-    },
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        status: { type: String, enum: ["confirmed", "pendding"], default: "pendding" },
+      },
+    ],
     links: {
       type: [
         {

@@ -33,19 +33,13 @@ const userSchema = new mongoose_1.Schema({
         //validate email
         //   match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, "Please fill a valid email address"],
     },
-    follower: [
+    follower: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }],
+    upVotesItem: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
-            ref: "User",
         },
     ],
-    following: {
-        type: [mongoose_1.Schema.Types.ObjectId],
-        ref: "User",
-    },
-    upVotesItem: {
-        type: [mongoose_1.Schema.Types.ObjectId],
-    },
     downVotesItem: {
         type: [mongoose_1.Schema.Types.ObjectId],
     },
@@ -69,6 +63,13 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         default: null,
     },
+    friends: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "User",
+            status: { type: String, enum: ["confirmed", "pendding"], default: "pendding" },
+        },
+    ],
     links: {
         type: [
             {

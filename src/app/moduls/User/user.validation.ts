@@ -14,18 +14,8 @@ export const userSchema = z.object({
   phoneNumber: z.string().optional(),
   profilePhoto: z.string().url("Invalid URL").optional(),
   friends: z.object({
-    sent: z.array(
-      z.object({
-        type: z.string().regex(/^[a-f\d]{24}$/i, { message: 'Invalid ObjectId format' }), // ObjectId validation
-        status: z.enum(['unconfirmed', 'confirmed']), // Enum for status
-      })
-    ),
-    received: z.array(
-      z.object({
-        type: z.string().regex(/^[a-f\d]{24}$/i, { message: 'Invalid ObjectId format' }), // ObjectId validation
-        status: z.enum(['unconfirmed', 'confirmed']), // Enum for status
-      })
-    ),
+    type: z.string(), // Assuming `type` is just a string representation of `ObjectId` for validation
+    status: z.enum(["confirmed", "pendding"]).default("pendding"),
   }),
 });
 
@@ -41,5 +31,3 @@ const followUnfollowValidationSchema = z.object({
 export const userValidation = {
   followUnfollowValidationSchema,
 };
-
-
