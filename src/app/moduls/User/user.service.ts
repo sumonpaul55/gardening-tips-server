@@ -100,7 +100,6 @@ const addFriendAndRemoveFriendDB = async (payload: { email: string; userId: stri
   if (!followingUser || !followedUser) {
     throw new AppError(httpStatus.NOT_FOUND, "One or more user not found");
   }
-
   const session = await startSession();
   try {
     session.startTransaction();
