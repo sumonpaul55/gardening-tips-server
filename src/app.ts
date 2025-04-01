@@ -8,7 +8,7 @@ const app: Application = express();
 
 app.use(cookieParser());
 // app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
-app.use(cors({ origin: ["http://localhost:3000", "https://gardenigng-tips-advice.vercel.app","http://64.23.231.38:2626"], credentials: true }));
+app.use(cors({ origin: ["http://localhost:3000", "https://gardenigng-tips-advice.vercel.app", "http://64.23.231.38:2626"], credentials: true }));
 
 // parser
 app.use(express.json());
